@@ -10,13 +10,14 @@ A professional, Polish-language demonstration website concept for **Areszt Śled
 - Design: modern public-sector information portal
 - Layout: responsive, mobile-first
 - Stack: semantic HTML, CSS and vanilla JavaScript
-- Accessibility: keyboard navigation, visible focus, skip link, semantic landmarks, reduced-motion support and responsive navigation
+- Accessibility: keyboard navigation, visible focus, skip link, semantic landmarks, reduced-motion support, responsive navigation and native FAQ disclosures
 
 ## Files
 
 - `index.html` — page content and structure
 - `styles.css` — visual design and responsive layouts
-- `script.js` — mobile navigation and current footer year
+- `script.js` — responsive navigation, outside-click/Escape handling, and current footer year
+- The FAQ uses native HTML disclosure elements, so it works without JavaScript.
 
 ## Local preview
 
