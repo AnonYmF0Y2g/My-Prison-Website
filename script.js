@@ -1,31 +1,49 @@
-const menuButton = document.querySelector(".menu-toggle");
-const navigation = document.querySelector("#primary-nav");
+/* Progressive enhancement for the responsive navigation. */
+(() => {
+  const menuButton = document.querySelector(".menu-toggle");
+  const navigation = document.querySelector("#primary-nav");
 
-if (menuButton && navigation) {
-  menuButton.addEventListener("click", () => {
-    const isOpen = menuButton.getAttribute("aria-expanded") === "true";
-    menuButton.setAttribute("aria-expanded", String(!isOpen));
-    menuButton.setAttribute("aria-label", isOpen ? "Otwórz menu" : "Zamknij menu");
-    navigation.classList.toggle("is-open", !isOpen);
-  });
+  if (menuButton && navigation) {
+    const setMenuOpen = (open, returnFocus = false) => {
+      menuButton.setAttribute("aria-expanded", String(open));
+      menuButton.setAttribute("aria-label", open ? "Zamknij menu" : "Otwórz menu");
+      navigation.classList.toggle("is-open", open);
+      if (returnFocus) menuButton.focus();
+    };
 
-  navigation.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      menuButton.setAttribute("aria-expanded", "false");
-      menuButton.setAttribute("aria-label", "Otwórz menu");
-      navigation.classList.remove("is-open");
+    menuButton.addEventListener("click", () => {
+      const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+      setMenuOpen(!isOpen);
     });
-  });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      menuButton.setAttribute("aria-expanded", "false");
-      menuButton.setAttribute("aria-label", "Otwórz menu");
-      navigation.classList.remove("is-open");
-      menuButton.focus();
+    navigation.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setMenuOpen(false));
+    });
+
+    document.addEventListener("click", (event) => {
+      const clickedInside = navigation.contains(event.target) || menuButton.contains(event.target);
+      if (!clickedInside && menuButton.getAttribute("aria-expanded") === "true") {
+        setMenuOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
+        setMenuOpen(false, true);
+      }
+    });
+
+    const desktopQuery = window.matchMedia("(min-width: 901px)");
+    const closeOnDesktop = (event) => {
+      if (event.matches) setMenuOpen(false);
+    };
+    if (desktopQuery.addEventListener) {
+      desktopQuery.addEventListener("change", closeOnDesktop);
+    } else {
+      desktopQuery.addListener(closeOnDesktop);
     }
-  });
-}
+  }
 
-const year = document.querySelector("#year");
-if (year) year.textContent = String(new Date().getFullYear());
+  const year = document.querySelector("#year");
+  if (year) year.textContent = String(new Date().getFullYear());
+})();
