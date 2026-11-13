@@ -550,3 +550,5 @@ main section[id] { scroll-margin-top: 108px; }
   .faq-item summary { min-height: 68px; font-size: 13px; }
   .faq-answer { padding-right: 34px; }
 }
+
+.hero-copy { position: relative; z-index: 1; }
